@@ -29,18 +29,25 @@ class MainActivity : AppCompatActivity() {
         val searchID = findViewById<EditText>(R.id.searchID)
         butSearchUser.setOnClickListener {
             val idStr = searchID.text.toString()
+            searchID.text.clear()
             if (isNumeric(idStr)) {
                 val memberData = getMemberDB(idStr.toUInt())
-                tvShowInfo.text = memberData.toString()
+                if (memberData != null) {
+                    tvShowInfo.text = memberData!!.toString()
+                }
+                else {
+                    tvShowInfo.text = "User does not exist."
+                }
             }
             else {
-                tvShowInfo.text = "Does not exist."
+                tvShowInfo.text = "Wrong input type."
             }
         }
 
         val butDelete = findViewById<Button>(R.id.button_delete)
         butDelete.setOnClickListener {
             val idStr = searchID.text.toString()
+            searchID.text.clear()
             if (isNumeric(idStr)) {
                 val id: UInt = idStr.toUInt()
                 val deleted = deleteMemberDB(id)
@@ -99,10 +106,20 @@ class MainActivity : AppCompatActivity() {
 
     // get info from edittext layout objects and add it into the database
     private fun addUserFromEditTexts() {
-        val idStr: String = findViewById<EditText>(R.id.enterID).text.toString()
-        val enterFname: String = findViewById<EditText>(R.id.enterFirstName).text.toString()
-        val enterLname: String = findViewById<EditText>(R.id.enterLastName).text.toString()
-        val rewardsStr: String = findViewById<EditText>(R.id.enterRewards).text.toString()
+        val etEnterID = findViewById<EditText>(R.id.enterID)
+        val etEnterFname = findViewById<EditText>(R.id.enterFirstName)
+        val etEnterLname = findViewById<EditText>(R.id.enterLastName)
+        val etEnterRewards = findViewById<EditText>(R.id.enterRewards)
+
+        val idStr: String = etEnterID.text.toString()
+        val enterFname: String = etEnterFname.text.toString()
+        val enterLname: String = etEnterLname.text.toString()
+        val rewardsStr: String = etEnterRewards.text.toString()
+
+        etEnterID.text.clear()
+        etEnterFname.text.clear()
+        etEnterLname.text.clear()
+        etEnterRewards.text.clear()
 
         if (isNumeric(idStr) && isNumeric(rewardsStr)) {
             newMemberDB(idStr.toUInt(), enterFname, enterLname, rewardsStr.toUInt())
